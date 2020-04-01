@@ -2,6 +2,7 @@ package module6;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -14,6 +15,7 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
 import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
+import de.fhpotsdam.unfolding.providers.Microsoft;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
 import processing.core.PApplet;
@@ -73,7 +75,7 @@ public class EarthquakeCityMap extends PApplet {
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 650, 600, new Microsoft.HybridProvider());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 		    //earthquakesURL = "2.5_week.atom";
 		}
@@ -85,7 +87,7 @@ public class EarthquakeCityMap extends PApplet {
 		//earthquakesURL = "test2.atom";
 		
 		// Uncomment this line to take the quiz
-		//earthquakesURL = "quiz2.atom";
+		earthquakesURL = "quiz2.atom";
 		
 		
 		// (2) Reading in earthquake data and geometric properties
@@ -114,8 +116,9 @@ public class EarthquakeCityMap extends PApplet {
 		    quakeMarkers.add(new OceanQuakeMarker(feature));
 		  }
 	    }
+		sortAndPrint(20);
 
-	    // could be used for debugging
+		// could be used for debugging
 	    printQuakes();
 	 		
 	    // (3) Add markers to map
@@ -123,8 +126,8 @@ public class EarthquakeCityMap extends PApplet {
 	    //           for their geometric properties
 	    map.addMarkers(quakeMarkers);
 	    map.addMarkers(cityMarkers);
-	    
-	    
+
+
 	}  // End setup
 	
 	
@@ -137,9 +140,17 @@ public class EarthquakeCityMap extends PApplet {
 	
 	
 	// TODO: Add the method:
-	//   private void sortAndPrint(int numToPrint)
 	// and then call that method from setUp
-	
+	private void sortAndPrint(int numToPrint) {
+		Object[] sortedQuakes = quakeMarkers.toArray();
+		Arrays.sort(sortedQuakes, Collections.reverseOrder());
+		for(int i = 0; i < numToPrint; i++)
+		{
+			EarthquakeMarker m = (EarthquakeMarker)sortedQuakes[i];
+			System.out.println(m.getTitle());
+		}
+	}
+
 	/** Event handler that gets called automatically when the 
 	 * mouse moves.
 	 */
@@ -188,8 +199,7 @@ public class EarthquakeCityMap extends PApplet {
 			unhideMarkers();
 			lastClicked = null;
 		}
-		else if (lastClicked == null) 
-		{
+		else {
 			checkEarthquakesForClick();
 			if (lastClicked == null) {
 				checkCitiesForClick();
