@@ -53,6 +53,7 @@ public class LifeExpectancy extends PApplet {
         map.draw();
         if (lastSelected != null) {
             showTitle();
+            //pink color
             setHighlightColor(color(255, 105, 180));
         }
     }
@@ -75,6 +76,9 @@ public class LifeExpectancy extends PApplet {
         }
     }
 
+    /** Event handler that gets called automatically when the
+     * mouse moves.
+     */
     @Override
     public void mouseMoved() {
         if (lastSelected != null) {
@@ -85,7 +89,9 @@ public class LifeExpectancy extends PApplet {
         selectMarkerIfHover(countryMarkers);
     }
 
+    // If there is a marker selected
     private void selectMarkerIfHover(List<Marker> markers) {
+        // Abort if there's already a marker selected
         if (lastSelected != null) {
             return;
         }
@@ -99,6 +105,10 @@ public class LifeExpectancy extends PApplet {
         }
     }
 
+    /**
+     * Method to change the background of a country
+     * @param color
+     */
     private void setHighlightColor(int color) {
         if (lastSelected instanceof MultiMarker) {
             List<Marker> markers = ((MultiMarker) lastSelected).getMarkers();
