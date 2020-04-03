@@ -107,7 +107,6 @@ public class LifeExpectancy extends PApplet {
 
     /**
      * Method to change the background of a country
-     * @param color
      */
     private void setHighlightColor(int color) {
         if (lastSelected instanceof MultiMarker) {
